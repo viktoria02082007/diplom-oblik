@@ -1,4 +1,3 @@
-
 <?php
     include("../Includes/db.php");
     session_start();

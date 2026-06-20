@@ -319,9 +319,8 @@
                   buyer_addr = '$address', buyer_bank = '$account' 
                   where buyer_id in 
                   (select buyer_id from buyerregistration 
-                  where buyer_phone='$sessphonenumber')"; 
-        echo $query;
-       
+                  where buyer_phone='$sessphonenumber')";
+
 
         $run = mysqli_query($con, $query);
 

@@ -328,7 +328,6 @@ while ($row = mysqli_fetch_array($run_query)) {
             $sql = "update farmerregistration 
                     set farmer_password='$encryption2' 
                     where farmer_phone=$sessphonenumber";
-            echo $sql;
             $run = mysqli_query($con, $sql);
             echo "<script>alert('Password Updated Sucessfully!');</script>";
             echo "<script>window.open('FarmerProfile.php','_self')</script>";
