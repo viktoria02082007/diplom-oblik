@@ -275,6 +275,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center">
                     <p><u><a href="https://www.agrocraft.com/">AgroCraft Corporation</a></u> is a Multitrading Company for farmers ang traders</p>
                     <p class="h6">Copy All right Reversed.<a class="text-green ml-2" href="https://www.google.com" target="_blank">Agrotech</a></p>
+                    <p class="h6 mt-1">Розробник сайту — Куцин Вікторія. З питань та зауважень щодо роботи сайту звертайтесь на <a class="text-green ml-1" href="mailto:viktoriya.kutsin@gmail.com">viktoriya.kutsin@gmail.com</a></p>
                 </div>
                 </hr>
             </div>
