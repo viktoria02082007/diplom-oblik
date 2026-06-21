@@ -243,7 +243,7 @@ while ($row = mysqli_fetch_array($run_query)) {
 
 <body>
     <div class="just">
-        <a href="FarmerHomepage.php"> <i class="fa fa-home fa-4x"></i></a>
+        <a href="farmerHomepage.php"> <i class="fa fa-home fa-4x"></i></a>
     </div>
 
     <div class="box">

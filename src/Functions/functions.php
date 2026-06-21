@@ -1,6 +1,8 @@
 <?php
 
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
     include("../Includes/db.php");
 
@@ -140,7 +142,7 @@
                             <h4><img src='iconsmall.png' style='width: 28px; margin-bottom:  10px;'> $name
                         </b></h4>
                     </div>
-                    <a href='../BuyerPortal2/ProductDetails.php?id=$product_id'>
+                    <a href='../BuyerPortal2/productdetails.php?id=$product_id'>
                         <img class='card-img-top' src='../Admin/product_images/$product_image' alt='Card image cap' height='300px'>
                     </a>
                     <div class='card-body pb-0'>

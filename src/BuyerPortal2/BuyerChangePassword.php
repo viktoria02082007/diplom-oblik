@@ -131,7 +131,7 @@ while ($row = mysqli_fetch_array($run_query)) {
 
 <body>
     <div class="just">
-        <a href="BuyerHomepage.php"> <i class="fa fa-home fa-4x"></i></a>
+        <a href="bhome.php"> <i class="fa fa-home fa-4x"></i></a>
     </div>
 
     <div class="box">
@@ -215,7 +215,7 @@ while ($row = mysqli_fetch_array($run_query)) {
             $run = mysqli_query($con, $query);
 
             echo "<script>alert('Password Updated Sucessfully!');</script>";
-            echo "<script>window.open('BuyerProfile.php','_self')</script>";
+            echo "<script>window.open('buyerprofile2.php','_self')</script>";
         } else {
             echo "<script>alert('Please Enter Valid Details');</script>";
             echo "<script>window.open('BuyerChangePassword.php','_self')</script>";

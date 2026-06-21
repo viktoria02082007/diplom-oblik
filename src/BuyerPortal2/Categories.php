@@ -536,8 +536,6 @@ include("../Functions/functions.php");
         if (isset($_SESSION['phonenumber'])) {
             echo "<a href='BuyerProfile.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Profile</a>";
             echo "<a href= 'Transaction.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Transactions</a>";
-            echo "<a href='saveforlater.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Save For Later</a>";
-            echo "<a href='#' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Subscriptions</a>";
             echo "<a href='farmer.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Farmers</a>";
             echo "<a href='../Includes/logout.php' class='list-group-item list-group-item-action ' style='background-color:#292b2c;text-align:center;color:goldenrod'>Logout</a>";
         } else {
@@ -565,10 +563,8 @@ include("../Functions/functions.php");
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <?php
             if (isset($_SESSION['phonenumber'])) {
-                echo "<a href='BuyerProfile2.php' class='dropdown-item  ' style='padding-right:-20px;'>Profile</a>";
+                echo "<a href='buyerprofile2.php' class='dropdown-item  ' style='padding-right:-20px;'>Profile</a>";
                 echo "<a href='Transaction.php' class='dropdown-item ' style='padding-right:-20px;'>Transactions</a>";
-                echo "<a href='#' class='dropdown-item'  style='padding-right:-20px;'>Subscriptions</a>";
-                echo "<a href='saveforlater.php' class='dropdown-item' style='padding-right:-20px;'>Save For Later</a>";
                 echo "<a href='farmers.php' class='dropdown-item' style='padding-right:-20px;' >Farmers</a>";
                 echo "<a href='../Includes/logout.php' class='dropdown-item ' style='padding-right:-20px;'>Logout</a>";
             } else {
@@ -771,10 +767,11 @@ include("../Functions/functions.php");
                             <h4><img src='iconsmall.png' style='width: 28px; margin-bottom:  10px;'> $name
                         </b></h4>
                     </div>
-                    <a href='../BuyerPortal2/ProductDetails.php?id=$product_id'>
+                    <a href='../BuyerPortal2/productdetails.php?id=$product_id'>
                         <img class='card-img-top' src='../Admin/product_images/$product_image' alt='Card image cap' height='300px'>
                     </a>
                     <form action = '' method = 'post'>
+                    <input type='hidden' name='product_id' value='$product_id'>
                     <div class='card-body pb-0'>
                         <div class='row'>
                             <div class='col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12'>
@@ -790,7 +787,7 @@ include("../Functions/functions.php");
                                     <div class='input-group-prepend'>
                                         <span class='input-group-text bg-warning border-secondary p-1' style='color:black;' id='inputGroup-sizing-default' placeholder='1'><b>Quantity</b></span>
                                     </div>
-                                    <input type='number' class='form-control' aria-label='Default' style='margin-top:0%;width:20%;padding:0%;' aria-describedby='inputGroup-sizing-default'>
+                                    <input type='number' name='quantity' value='1' min='1' class='form-control' aria-label='Default' style='margin-top:0%;width:60%;padding:0%;' aria-describedby='inputGroup-sizing-default'>
                                 </div>
                             </div>
                         </div>
@@ -806,11 +803,10 @@ include("../Functions/functions.php");
                 </div>
             </div>
            ";
-                              if (isset($_POST['cart'])) {
+                              if (isset($_POST['cart']) && isset($_POST['product_id']) && $_POST['product_id'] == $product_id) {
 
-                                   if (isset($_POST['quantity'])) {
-                                        $qty = $_POST['quantity'];
-                                   } else {
+                                   $qty = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 1;
+                                   if ($qty < 1) {
                                         $qty = 1;
                                    }
                                    global $con;

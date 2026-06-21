@@ -248,8 +248,6 @@ include("../Functions/functions.php");
                 if (isset($_SESSION['phonenumber'])) {
                     echo "<a href='BuyerProfile.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Profile</a>";
                     echo "<a href= 'Transaction.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Transactions</a>";
-                    echo "<a href='saveforlater.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Save For Later</a>";
-                    echo "<a href='#' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Subscriptions</a>";
                     echo "<a href='farmer.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Farmers</a>";
                     echo "<a href='../Includes/logout.php' class='list-group-item list-group-item-action ' style='background-color:#292b2c;text-align:center;color:goldenrod'>Logout</a>";
                 } else {
@@ -277,10 +275,8 @@ include("../Functions/functions.php");
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <?php
                     if (isset($_SESSION['phonenumber'])) {
-                        echo "<a href='BuyerProfile2.php' class='dropdown-item  ' style='padding-right:-20px;'>Profile</a>";
+                        echo "<a href='buyerprofile2.php' class='dropdown-item  ' style='padding-right:-20px;'>Profile</a>";
                         echo "<a href='Transaction.php' class='dropdown-item ' style='padding-right:-20px;'>Transactions</a>";
-                        echo "<a href='#' class='dropdown-item'  style='padding-right:-20px;'>Subscriptions</a>";
-                        echo "<a href='saveforlater.php' class='dropdown-item' style='padding-right:-20px;'>Save For Later</a>";
                         echo "<a href='farmers.php' class='dropdown-item' style='padding-right:-20px;' >Farmers</a>";
                         echo "<a href='../Includes/logout.php' class='dropdown-item ' style='padding-right:-20px;'>Logout</a>";
                     } else {
@@ -305,58 +301,35 @@ include("../Functions/functions.php");
         </div>
     <div class="container mt-5">
         <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 ">
-                <div class="card border-dark border" >
-                    <div class="card-body ">
-                        <h5 class="card-title text-center"><img src="iconbig3.png" style=" margin-bottom:  10px;"></h5>
-                        <h4 class="card-subtitle mb-2  text-center">Abhishek</h4>
-                        <p class="card-text text-center">Vashi, Maharashtra<br><br>
-                            <button type="button" class="btn  border-dark border" style="background-color:#FFD700;color:black">View Profile </button>
+<?php
+            // Лише фермери, у яких є хоча б один товар у таблиці products
+            $farmers_query = "SELECT * FROM farmerregistration
+                              WHERE farmer_id IN (SELECT DISTINCT farmer_fk FROM products)
+                              ORDER BY farmer_name";
+            $farmers_run = mysqli_query($con, $farmers_query);
+            if ($farmers_run && mysqli_num_rows($farmers_run) > 0) {
+                while ($f = mysqli_fetch_array($farmers_run)) {
+                    $fid       = $f['farmer_id'];
+                    $fname     = $f['farmer_name'];
+                    $fstate    = $f['farmer_state'];
+                    $fdistrict = $f['farmer_district'];
+                    echo "
+            <div class='col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 '>
+                <div class='card border-dark border'>
+                    <div class='card-body '>
+                        <h5 class='card-title text-center'><img src='iconbig.png' style='margin-bottom:10px;'></h5>
+                        <h4 class='card-subtitle mb-2 text-center'>$fname</h4>
+                        <p class='card-text text-center'>$fdistrict, $fstate<br><br>
+                            <a href='BuyerPageFarmerProfile.php?id=$fid' class='btn border-dark border' style='background-color:#FFD700;color:black'>View Profile </a>
                         </p>
-                        <!-- <a href="#" class="card-link text-center">Card link</a>
-                      <a href="#" class="card-link text-center">Another link</a> -->
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 ">
-                <div class="card border-dark border" >
-                    <div class="card-body ">
-                        <h5 class="card-title text-center"><img src="iconbig.png" style=" margin-bottom:  10px;"></h5>
-                        <h4 class="card-subtitle mb-2  text-center">Ansh</h4>
-                        <p class="card-text text-center">Kopar, Maharashtra<br><br>
-                            <button type="button" class="btn  border-dark border" style="background-color:#FFD700;color:black">View Profile </button>
-                        </p>
-                        <!-- <a href="#" class="card-link text-center">Card link</a>
-                      <a href="#" class="card-link text-center">Another link</a> -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 ">
-                <div class="card border-dark border" >
-                    <div class="card-body ">
-                        <h5 class="card-title text-center"><img src="iconbig2.png" style=" margin-bottom:  10px;"></h5>
-                        <h4 class="card-subtitle mb-2  text-center">Gladina</h4>
-                        <p class="card-text text-center">Thane, Maharashtra<br><br>
-                            <button type="button" class="btn  border-dark border" style="background-color:#FFD700;color:black">View Profile </button>
-                        </p>
-                        <!-- <a href="#" class="card-link text-center">Card link</a>
-                      <a href="#" class="card-link text-center">Another link</a> -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 ">
-                <div class="card border-dark border" >
-                    <div class="card-body ">
-                        <h5 class="card-title text-center"><img src="iconbig4.png" style=" margin-bottom:  10px;"></h5>
-                        <h4 class="card-subtitle mb-2  text-center">Calista</h4>
-                        <p class="card-text text-center">Wadala, Maharashtra<br><br>
-                            <button type="button" class="btn  border-dark border" style="background-color:#FFD700;color:black">View Profile </button>
-                        </p>
-                        <!-- <a href="#" class="card-link text-center">Card link</a>
-                      <a href="#" class="card-link text-center">Another link</a> -->
-                    </div>
-                </div>
-            </div>
+            </div>";
+                }
+            } else {
+                echo "<div class='col-12 text-center'><h4>No farmers with products yet.</h4></div>";
+            }
+            ?>
 
         </div>
 

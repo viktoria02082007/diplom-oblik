@@ -584,8 +584,6 @@ margin-top:2%;
         if (isset($_SESSION['phonenumber'])) {
             echo "<a href='BuyerProfile.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Profile</a>";
             echo "<a href= 'Transaction.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Transactions</a>";
-            echo "<a href='saveforlater.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Save For Later</a>";
-            echo "<a href='#' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Subscriptions</a>";
             echo "<a href='farmer.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Farmers</a>";
             echo "<a href='../Includes/logout.php' class='list-group-item list-group-item-action ' style='background-color:#292b2c;text-align:center;color:goldenrod'>Logout</a>";
         } else {
@@ -613,10 +611,8 @@ margin-top:2%;
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <?php
             if (isset($_SESSION['phonenumber'])) {
-                echo "<a href='BuyerProfile2.php' class='dropdown-item  ' style='padding-right:-20px;'>Profile</a>";
+                echo "<a href='buyerprofile2.php' class='dropdown-item  ' style='padding-right:-20px;'>Profile</a>";
                 echo "<a href='Transaction.php' class='dropdown-item ' style='padding-right:-20px;'>Transactions</a>";
-                echo "<a href='#' class='dropdown-item'  style='padding-right:-20px;'>Subscriptions</a>";
-                echo "<a href='saveforlater.php' class='dropdown-item' style='padding-right:-20px;'>Save For Later</a>";
                 echo "<a href='farmers.php' class='dropdown-item' style='padding-right:-20px;' >Farmers</a>";
                 echo "<a href='../Includes/logout.php' class='dropdown-item ' style='padding-right:-20px;'>Logout</a>";
             } else {
@@ -805,7 +801,7 @@ margin-top:2%;
                                                        <h4><img src='iconsmall.png' style='width: 28px; margin-bottom:  10px;'> $name
                                                        </b></h4>
                                                   </div>
-                                                  <a href='../BuyerPortal2/ProductDetails.php?id=$product_id'>
+                                                  <a href='../BuyerPortal2/productdetails.php?id=$product_id'>
                                                   <img class='card-img-top' src='../Admin/product_images/$product_image' alt='Card image cap' height='300px'>
                                                   </a>
                                                   <form action = '' method = 'post'>

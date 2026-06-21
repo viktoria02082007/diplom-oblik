@@ -1,8 +1,30 @@
 <?php
     include("../Functions/functions.php");
     include("../Includes/db.php");
-    session_start();
+    // session_start() вже викликається у functions.php — повторний виклик дає notice
     $sessphonenumber = $_SESSION['phonenumber'];
+
+    if (isset($_POST['confirm']))
+    {
+        $newname = mysqli_real_escape_string($con, $_POST['name']);
+        $phone   = mysqli_real_escape_string($con, $_POST['phonenumber']);
+        $address = mysqli_real_escape_string($con, $_POST['address']);
+        $account = mysqli_real_escape_string($con, $_POST['bank']);
+        $comp    = mysqli_real_escape_string($con, $_POST['comp']);
+        $mail    = mysqli_real_escape_string($con, $_POST['mail']);
+
+        $update = "update buyerregistration
+                   set buyer_name='$newname', buyer_phone='$phone',
+                       buyer_addr='$address', buyer_bank='$account',
+                       buyer_comp='$comp', buyer_mail='$mail'
+                   where buyer_phone='$sessphonenumber'";
+        mysqli_query($con, $update);
+
+        $_SESSION['phonenumber'] = $phone;
+        echo "<script>window.location='buyerprofile2.php'</script>";
+        exit;
+    }
+
     $sql="select * from buyerregistration where buyer_phone = '$sessphonenumber'";
     $run_query = mysqli_query($con,$sql);
     while($row = mysqli_fetch_array($run_query))
@@ -442,7 +464,6 @@
                     Profile
                 </a>
                 <a href="#" class="list-group-item list-group-item-action" style="background-color:#292b2c;text-align:center;color:goldenrod">Transactions</a>
-                <a href="#" class="list-group-item list-group-item-action" style="background-color:#292b2c;text-align:center;color:goldenrod">subscriptions</a>
                 <a href="#" class="list-group-item list-group-item-action" style="background-color:#292b2c;text-align:center;color:goldenrod">Farmers</a>
                 <a href="#" class="list-group-item list-group-item-action " style="background-color:#292b2c;text-align:center;color:goldenrod">Logout</a>
             </div>
@@ -465,7 +486,6 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item  " style="padding-right:-20px;">Profile</a>
                     <a class="dropdown-item " style="padding-right:-20px;" href="#">Transactions</a>
-                    <a class="dropdown-item " style="padding-right:-20px;" href="#">Subscriptions</a>
                     <a class="dropdown-item " style="padding-right:-20px;" href="#">Farmers</a>
                     <a class="dropdown-item " style="padding-right:-20px;" href="#">Logout</a>
                 </div>
@@ -488,24 +508,25 @@
     </div></div>
 
     <div class="container" >
+        <form method="post">
         <div class="form">
             <div class="input-group mt-4 s">
                 <div class="input-group-prepend ">
                     <span class="input-group-text text  " id="inputGroup-sizing-default" ><i class="fas fa-user mr-2"></i>Full name</span>
                 </div>
-                <input type="text"  class="form-control border border-dark" id="staticEmail" value="<?php echo $name?>">
+                <input type="text" name="name" class="form-control border border-dark" id="staticEmail" value="<?php echo $name?>">
             </div>
             <div class="input-group mt-4 s">
                 <div class="input-group-prepend ">
                     <span class="input-group-text text  " id="inputGroup-sizing-default" ><i class="fas fa-phone-alt mr-2"></i>Phone No.</span>
                 </div>
-                <input type="phonenumber"  class="form-control border border-dark" id="staticEmail" value="<?php echo $phone?>">
+                <input type="phonenumber" name="phonenumber" class="form-control border border-dark" id="staticEmail" value="<?php echo $phone?>">
             </div>
             <div class="input-group mt-4 s">
                 <div class="input-group-prepend ">
                     <span class="input-group-text text  " id="inputGroup-sizing-default" ><i class="fas fa-home mr-2"></i>Address</span>
                 </div>
-                <input type="text"  class="form-control border border-dark" id="staticEmail" value="<?php echo $address?>">
+                <input type="text" name="address" class="form-control border border-dark" id="staticEmail" value="<?php echo $address?>">
             </div> 
             <div class="input-group mt-4 s">
                 <div class="input-group-prepend ">
@@ -517,13 +538,13 @@
                 <div class="input-group-prepend ">
                     <span class="input-group-text text  " id="inputGroup-sizing-default" ><i class="fas fa-university mr-2"></i>Account No.</span>
                 </div>
-                <input type="number"  class="form-control border border-dark" id="staticEmail" value=" <?php echo $bank?>">
+                <input type="number" name="bank" class="form-control border border-dark" id="staticEmail" value="<?php echo $bank?>">
             </div> 
             <div class="input-group mt-4 s">
                 <div class="input-group-prepend ">
                     <span class="input-group-text text  " id="inputGroup-sizing-default" ><i class="fas fa-building mr-2"></i>Company</span>
                 </div>
-                <input type="number"  class="form-control border border-dark" id="staticEmail" value="<?php echo $comp?>">
+                <input type="text" name="comp" class="form-control border border-dark" id="staticEmail" value="<?php echo $comp?>">
             </div> 
             <div class="input-group mt-4 s">
                 <div class="input-group-prepend ">
@@ -535,12 +556,13 @@
                 <div class="input-group-prepend ">
                     <span class="input-group-text text  " id="inputGroup-sizing-default" ><i class="far fa-envelope mr-2"></i>Email id </span>
                 </div>
-                <input type="email"  class="form-control border border-dark" id="staticEmail" value="<?php echo $mail?> ">
+                <input type="email" name="mail" class="form-control border border-dark" id="staticEmail" value="<?php echo $mail?>">
             </div> 
         </div>
-        <button type="button" class="btn text-center d-flex mx-auto btn-lg" style="background-color:#292b2c;color:goldenrod">Confirm</button>
+        <button type="submit" name="confirm" class="btn text-center d-flex mx-auto btn-lg" style="background-color:#292b2c;color:goldenrod">Confirm</button>
+        </form>
         <br>
-        <button type="button" class="btn text-center d-flex mx-auto btn-lg" style="background-color:#292b2c;color:goldenrod">Change Password</button>
+        <a href="BuyerChangePassword.php" class="btn text-center d-flex mx-auto btn-lg" style="background-color:#292b2c;color:goldenrod">Change Password</a>
     </div>
 
     <section id="footer" class="myfooter">

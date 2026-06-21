@@ -1,6 +1,18 @@
 <?php
 
 include("../Functions/functions.php");
+
+// Який фермер відкривається — приходить як ?id=<farmer_id> зі списку фермерів / сторінки товару
+$farmer_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$fname = $fphone = $fstate = $fdistrict = "";
+$farmer_run = mysqli_query($con, "select * from farmerregistration where farmer_id = $farmer_id");
+if ($farmer_run && mysqli_num_rows($farmer_run) > 0) {
+    $frow = mysqli_fetch_array($farmer_run);
+    $fname     = $frow['farmer_name'];
+    $fphone    = $frow['farmer_phone'];
+    $fstate    = $frow['farmer_state'];
+    $fdistrict = $frow['farmer_district'];
+}
 ?>
 
 
@@ -77,7 +89,23 @@ include("../Functions/functions.php");
     .card {
         width: 100%;
         height: 100%;
-        margin: 10px;
+        margin: 0;
+    }
+
+    /* Рівні картки товарів — рівно по 3 в ряд */
+    .BigBox {
+        align-items: stretch;
+    }
+
+    .BigBox>[class*="col-"] {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
     }
 
     .right {
@@ -364,8 +392,6 @@ include("../Functions/functions.php");
         if (isset($_SESSION['phonenumber'])) {
             echo "<a href='BuyerProfile.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Profile</a>";
             echo "<a href= 'Transaction.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Transactions</a>";
-            echo "<a href='saveforlater.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Save For Later</a>";
-            echo "<a href='#' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Subscriptions</a>";
             echo "<a href='#farmer.php' class='list-group-item list-group-item-action' style='background-color:#292b2c;text-align:center;color:goldenrod'>Farmers</a>";
             echo "<a href='../Includes/logout.php' class='list-group-item list-group-item-action ' style='background-color:#292b2c;text-align:center;color:goldenrod'>Logout</a>";
         } else {
@@ -393,10 +419,8 @@ include("../Functions/functions.php");
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <?php
             if (isset($_SESSION['phonenumber'])) {
-                echo "<a href='BuyerProfile2.php' class='dropdown-item  ' style='padding-right:-20px;'>Profile</a>";
+                echo "<a href='buyerprofile2.php' class='dropdown-item  ' style='padding-right:-20px;'>Profile</a>";
                 echo "<a href='Transaction.php' class='dropdown-item ' style='padding-right:-20px;'>Transactions</a>";
-                echo "<a href='#' class='dropdown-item'  style='padding-right:-20px;'>Subscriptions</a>";
-                echo "<a href='saveforlater.php' class='dropdown-item' style='padding-right:-20px;'>Save For Later</a>";
                 echo "<a href='farmers.php' class='dropdown-item' style='padding-right:-20px;' >Farmers</a>";
                 echo "<a href='../Includes/logout.php' class='dropdown-item ' style='padding-right:-20px;'>Logout</a>";
             } else {
@@ -419,13 +443,13 @@ include("../Functions/functions.php");
                         <div class="row">
                             <div class="col-md-12" style="margin-top:35px;">
                                 <span style="padding:15px;">
-                                    <h4 id="full_name" class=""><img src="iconsmall.png" style="width: 28px; margin-bottom:  10px;"><b> Ramlal Chatur Singh</b></h4>
+                                    <h4 id="full_name" class=""><img src="iconsmall.png" style="width: 28px; margin-bottom:  10px;"><b> <?php echo $fname; ?></b></h4>
                                 </span>
                                 <span style="padding:15px;">
-                                    <h4 id="full_name" style="margin-left:-9%;"><img src="phoneicon.jpg" style="width: 32px; margin-bottom:  10px;"><b> 8169193101 </b></h4>
+                                    <h4 id="full_name" style="margin-left:-9%;"><img src="phoneicon.jpg" style="width: 32px; margin-bottom:  10px;"><b> <?php echo $fphone; ?> </b></h4>
                                 </span>
                                 <span style="padding:15px;">
-                                    <h4 id="full_name" class=""><img src="location.jpg" style="width: 32px; margin-bottom:  10px;"><b> Maharashtra , Thane</b></h4>
+                                    <h4 id="full_name" class=""><img src="location.jpg" style="width: 32px; margin-bottom:  10px;"><b> <?php echo $fstate; ?> , <?php echo $fdistrict; ?></b></h4>
                                 </span>
                             </div>
                         </div>
@@ -436,10 +460,6 @@ include("../Functions/functions.php");
                                     <span>
                                         <h4 style='color:goldenrod;' class='text-center'>Have Some Query ?<br></h4>
                                         <a href='#' class='btn btn-warning border-secondary  chat' style='color:black;padding:2px;'><b>Chat Here</b><img src='chat2.png' class='ml-1 mb-1'></a>
-                                    </span>
-                                    <span>
-                                        <h4 style='color:goldenrod;' class='text-center ''>Get Latest Notifications<br></h4>
-                                        <button href='#' class='btn btn-warning btn-btn-lg border-secondary  chat' style='color:black;padding:2px;'><b>Subscriptions  </b><img class='ml-1 mb-1'></button>
                                     </span>
                                     <span>
                                         <h4 style='color:goldenrod;' class='text-center ''>Report Query <br></h4>
@@ -457,32 +477,38 @@ include("../Functions/functions.php");
     <div class="text-center"><h3 style="padding:5px; margin-top:20px;">Farmer All Products</div>  
     <hr>           
     <div class="container">                
-        <div class="row BigBox">
+<?php
+            // Усі товари саме цього фермера
+            $prod_run = mysqli_query($con, "select * from products where farmer_fk = $farmer_id");
+            if ($prod_run && mysqli_num_rows($prod_run) > 0) {
+                $i = 0;
+                while ($p = mysqli_fetch_array($prod_run)) {
+                    $product_id    = $p['product_id'];
+                    $product_title = $p['product_title'];
+                    $product_image = $p['product_image'];
+                    $product_price = $p['product_price'];
+                    // Нова стрічка кожні 3 картки — інакше їх «зносить» вправо
+                    if ($i % 3 == 0) {
+                        echo "<div class='row BigBox mt-2'>";
+                    }
+                    echo "
             <div class='col col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4'>
                 <div class='card pb-1 pl-1 pr-1 pt-0' style='height:542px'>
                     <br>
                     <div class='mt-0'><b>
-                        <h4><img src='iconsmall.png' style='width: 28px; margin-bottom:  10px;'> $name
+                        <h4><img src='iconsmall.png' style='width: 28px; margin-bottom:  10px;'> $fname
                         </b></h4>
                     </div>
-                    <a href='../BuyerPortal2/ProductDetails.php?id=$product_id'>
-                        <img class='card-img-top' src='../Admin/product_images/Coffee.jpg' alt='Card image cap' height='300px'>
+                    <a href='productdetails.php?id=$product_id'>
+                        <img class='card-img-top' src='../Admin/product_images/$product_image' alt='Card image cap' height='300px' onerror=\"this.src='../Images/Website/noimage.jpg'\">
                     </a>
                     <div class='card-body pb-0'>
                         <div class='row'>
-                            <div class='col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12'>
+                            <div class='col-12'>
                                 <div class='input-group mb'>
                                     <div class='input-group-prepend'>
                                         <h5 class='card-title font-weight-bold'>$product_title</h5>
                                     </div>
-                                </div>
-                            </div>
-                            <div class='col-12 col-xl-6 col-lg-6 col-md-6 col-sm-12'>
-                                <div class='input-group mb-1'>
-                                    <div class='input-group-prepend'>
-                                        <span class='input-group-text bg-warning border-secondary p-1' style='color:black;' id='inputGroup-sizing-default' placeholder='1'><b>Quantity</b></span>
-                                    </div>
-                                    <input type='number' class='form-control' aria-label='Default' style='margin-top:0%;width:20%;padding:0%;' aria-describedby='inputGroup-sizing-default'>
                                 </div>
                             </div>
                         </div>
@@ -490,14 +516,26 @@ include("../Functions/functions.php");
                         <div class='row'>
                             <div class='col-1 col-xl-3 col-lg-2 col-md-2 col-sm-2'></div>
                                 <div class='col-12 col-xl-6 col-lg-6 col-md-6  col-sm-12'>
-                                    <a href='../BuyerPortal2/bhome.php?add_cart=$product_id' class='btn btn-warning border-secondary mr-1  ' style='color:black ;font-weight:50px;'>Add to cart<img src='carticons.png' height='20px'></a>
+                                    <a href='bhome.php?add_cart=$product_id' class='btn btn-warning border-secondary mr-1  ' style='color:black ;font-weight:50px;'>Add to cart<img src='carticons.png' height='20px'></a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div>";
+                    // Закрити стрічку після кожної 3-ї картки
+                    if ($i % 3 == 2) {
+                        echo "</div>";
+                    }
+                    $i++;
+                }
+                // Закрити «хвіст», якщо останній ряд неповний
+                if ($i % 3 != 0) {
+                    echo "</div>";
+                }
+            } else {
+                echo "<div class='row'><div class='col-12 text-center'><h5 class='mt-3'>This farmer has no products yet.</h5></div></div>";
+            }
+            ?>
     </div>            
     <br><br>
 

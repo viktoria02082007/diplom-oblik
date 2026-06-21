@@ -22,6 +22,11 @@ RUN docker-php-ext-install mysqli \
   && find /etc/apache2/mods-enabled/ -name "mpm_*.load" \
   && test "$(find /etc/apache2/mods-enabled/ -name 'mpm_*.load' | wc -l)" = "1"
 
+# Вмикаємо output buffering: частина PHP-файлів має пробіли/BOM перед <?php,
+# через що session_start()/header() кидали "headers already sent".
+# Буферизація відкладає відправку заголовків і прибирає цей клас помилок глобально.
+RUN echo "output_buffering = 4096" > /usr/local/etc/php/conf.d/zz-output-buffering.ini
+
 # Код застосунку лежить у папці src/ — копіюємо її як корінь сайту
 COPY src/ /var/www/html/
 

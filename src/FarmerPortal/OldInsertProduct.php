@@ -199,7 +199,7 @@ $sessphonenumber = $_SESSION['phonenumber'];
 
 <body>
     <div class="header">
-        <form action="Insertproduct.php" method="post" enctype="multipart/form-data">
+        <form action="InsertProduct.php" method="post" enctype="multipart/form-data">
             <br>
             <!-- <div class="inp">Insert New Product Here</div> -->
             <div><label style="font-size :50px; text-shadow: 1px 1px 1px gray;"><b>Insert New Product Here</b><i style="padding-left:1%;color:green;" class="fas fa-leaf "></i></label></div>
